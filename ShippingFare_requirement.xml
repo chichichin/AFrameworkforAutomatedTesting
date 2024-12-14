@@ -1,0 +1,59 @@
+<requirement>
+    <api>
+        <name>Shipping Fare Calculation API</name>
+        <description>
+            API này tính toán giá cước giao hàng dựa trên trọng lượng gói hàng và khoảng cách giao hàng.
+            Phí giao hàng có thể thay đổi tùy thuộc vào trọng lượng của gói hàng và khoảng cách cần vận chuyển.
+        </description>
+        <method>GET</method>
+        <path>/shippingFare</path>
+        <parameters>
+            <parameter>
+                <name>weight</name>
+                <type>double</type>
+                <description>Trọng lượng gói hàng (kg)</description>
+                <required>true</required>
+            </parameter>
+            <parameter>
+                <name>distance</name>
+                <type>int</type>
+                <description>Khoảng cách giao hàng (km)</description>
+                <required>true</required>
+            </parameter>
+        </parameters>
+        <responses>
+            <response>
+                <code>200</code>
+                <description>Trả về giá cước giao hàng sau khi tính toán</description>
+                <format>JSON</format>
+                <logic>
+                    <case>
+                        <condition>weight &gt;= 0 &amp;&amp; weight &lt;= 5</condition>
+                        <fare>50</fare>
+                        <description>Phí giao hàng cho gói hàng có trọng lượng dưới 5kg</description>
+                    </case>
+                    <case>
+                        <condition>weight &gt;= 5 &amp;&amp; weight &lt;= 20</condition>
+                        <fare>100</fare>
+                        <description>Phí giao hàng cho gói hàng có trọng lượng từ 5kg đến 20kg</description>
+                    </case>
+                    <case>
+                        <condition>weight &gt; 20</condition>
+                        <fare>150</fare>
+                        <description>Phí giao hàng cho gói hàng có trọng lượng trên 20kg</description>
+                    </case>
+                    <case>
+                        <condition>distance &gt;= 100</condition>
+                        <fareAdjustment>+50</fareAdjustment>
+                        <description>Phí giao hàng được điều chỉnh tăng 50 nếu khoảng cách giao hàng trên 100km</description>
+                    </case>
+                    <case>
+                        <condition>distance &gt; 0 &amp;&amp; distance &lt; 100</condition>
+                        <fareAdjustment>0</fareAdjustment>
+                        <description>Không thay đổi giá cước nếu khoảng cách giao hàng dưới 100km</description>
+                    </case>
+                </logic>
+            </response>
+        </responses>
+    </api>
+</requirement>

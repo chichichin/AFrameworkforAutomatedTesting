@@ -1,0 +1,56 @@
+<requirement>
+    <api>
+        <name>Final Price Calculation API</name>
+        <description>
+            API này tính toán giá cuối cùng của một sản phẩm dựa trên giá gốc và mã giảm giá. Các mã giảm giá được phân loại theo các nhóm để áp dụng tỷ lệ giảm giá tương ứng.
+        </description>
+        <method>GET</method>
+        <path>/FinalPriceCalculate</path>
+        <parameters>
+            <parameter>
+                <name>basePrice</name>
+                <type>double</type>
+                <description>Giá gốc của sản phẩm</description>
+                <required>true</required>
+            </parameter>
+            <parameter>
+                <name>couponCode</name>
+                <type>int</type>
+                <description>Mã giảm giá để áp dụng tỷ lệ giảm giá</description>
+                <required>true</required>
+            </parameter>
+        </parameters>
+        <responses>
+            <response>
+                <code>200</code>
+                <description>Trả về giá cuối cùng sau khi áp dụng giảm giá</description>
+                <format>JSON</format>
+                <logic>
+                    <case>
+                        <condition>basePrice &gt; 0.0</condition>
+                        <subCondition>
+                            <condition>couponCode &gt;= 1 &amp;&amp; couponCode &lt;= 3</condition>
+                            <finalPrice>basePrice * 0.95</finalPrice>
+                            <description>Giảm giá 5% nếu mã giảm giá từ 1 đến 3.</description>
+                        </subCondition>
+                        <subCondition>
+                            <condition>couponCode &gt;= 4 &amp;&amp; couponCode &lt;= 6</condition>
+                            <finalPrice>basePrice * 0.8</finalPrice>
+                            <description>Giảm giá 20% nếu mã giảm giá từ 4 đến 6.</description>
+                        </subCondition>
+                        <subCondition>
+                            <condition>Khác</condition>
+                            <finalPrice>basePrice</finalPrice>
+                            <description>Không áp dụng giảm giá nếu mã giảm giá không hợp lệ.</description>
+                        </subCondition>
+                    </case>
+                    <case>
+                        <condition>basePrice &lt;= 0.0</condition>
+                        <finalPrice>basePrice</finalPrice>
+                        <description>Giá trị basePrice không hợp lệ nếu giá trị nhỏ hơn hoặc bằng 0.</description>
+                    </case>
+                </logic>
+            </response>
+        </responses>
+    </api>
+</requirement>

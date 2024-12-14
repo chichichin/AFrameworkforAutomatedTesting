@@ -1,0 +1,57 @@
+<requirement>
+    <api>
+        <name>Order Status API</name>
+        <description>
+            API này trả về trạng thái đơn hàng dựa trên giá trị đơn hàng và trạng thái vận chuyển của đơn hàng.
+            Nếu giá trị đơn hàng nhỏ hơn 100, trạng thái sẽ là Low Value. Nếu giá trị đơn hàng lớn hơn hoặc bằng 100, trạng thái vận chuyển được xác định dựa trên mã trạng thái vận chuyển.
+        </description>
+        <method>GET</method>
+        <path>/OrderStatus</path>
+        <parameters>
+            <parameter>
+                <name>orderValue</name>
+                <type>double</type>
+                <description>Giá trị của đơn hàng</description>
+                <required>true</required>
+            </parameter>
+            <parameter>
+                <name>shippingStatus</name>
+                <type>int</type>
+                <description>Mã trạng thái vận chuyển của đơn hàng (1: Delivered, 2: In Transit, 3: Pending)</description>
+                <required>true</required>
+            </parameter>
+        </parameters>
+        <responses>
+            <response>
+                <code>200</code>
+                <description>Trả về trạng thái đơn hàng dựa trên giá trị đơn hàng và mã trạng thái vận chuyển</description>
+                <format>JSON</format>
+                <logic>
+                    <case>
+                        <condition>orderValue &gt;0 &amp;&amp; orderValue &lt; 100</condition>
+                        <status>Low Value</status>
+                        <description>Giá trị đơn hàng dưới 100, trạng thái đơn hàng là Low Value.</description>
+                    </case>
+                    <case>
+                        <condition>orderValue &gt;= 100</condition>
+                        <subCondition>
+                            <condition>shippingStatus = 1</condition>
+                            <status>Delivered</status>
+                            <description>Trạng thái vận chuyển là Delivered</description>
+                        </subCondition>
+                        <subCondition>
+                            <condition>shippingStatus = 2</condition>
+                            <status>In Transit</status>
+                            <description>Trạng thái vận chuyển là In Transit</description>
+                        </subCondition>
+                        <subCondition>
+                            <condition>shippingStatus = 3</condition>
+                            <status>Pending</status>
+                            <description>Trạng thái vận chuyển là Pending</description>
+                        </subCondition>
+                    </case>
+                </logic>
+            </response>
+        </responses>
+    </api>
+</requirement>

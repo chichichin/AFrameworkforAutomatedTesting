@@ -1,0 +1,82 @@
+<requirement>
+    <api>
+        <name>Late Bonus Calculation API</name>
+        <description>
+            API này tính toán tiền thưởng dựa trên mức lương cơ bản và số năm làm việc.
+            Tiền thưởng sẽ được tính theo các mức cố định dựa trên số năm làm việc:
+            <list>
+                <item>Số năm làm việc ≥ 10: Thưởng 10% mức lương.</item>
+                <item>Số năm làm việc từ 5 đến dưới 10: Thưởng 5% mức lương.</item>
+                <item>Số năm làm việc &lt; 5: Không có thưởng.</item>
+            </list>
+        </description>
+        <method>GET</method>
+        <path>/lateBonusCalcu</path>
+        <parameters>
+            <parameter>
+                <name>salary</name>
+                <type>double</type>
+                <description>Mức lương cơ bản (đơn vị: tiền tệ, phải lớn hơn hoặc bằng 0)</description>
+                <required>true</required>
+            </parameter>
+            <parameter>
+                <name>years</name>
+                <type>int</type>
+                <description>Số năm làm việc (phải lớn hơn hoặc bằng 0)</description>
+                <required>true</required>
+            </parameter>
+        </parameters>
+        <responses>
+            <response>
+                <code>200</code>
+                <description>Trả về số tiền thưởng dựa trên mức lương và số năm làm việc</description>
+                <format>JSON</format>
+                <logic>
+                    <case>
+                        <condition>years &gt;= 10 &amp;&amp; years &lt; 60</condition>
+                        <subCondition>
+                            <condition>salary &gt;= 0</condition>
+                            <bonus>salary * 0.1</bonus>
+                            <description>Số năm làm việc ≥ 10, tiền thưởng bằng 10% mức lương cơ bản.</description>
+                        </subCondition>
+                    </case>
+                    <case>
+                        <condition>years &gt;= 5 &amp;&amp; years &lt; 10</condition>
+                        <subCondition>
+                            <condition>salary &gt;= 0.0</condition>
+                            <bonus>salary * 0.05</bonus>
+                            <description>Số năm làm việc từ 5 đến dưới 10, tiền thưởng bằng 5% mức lương cơ bản.</description>
+                        </subCondition>
+                    </case>
+                    <case>
+                        <condition>years &gt;= 0 &amp;&amp; years &lt; 5</condition>
+                        <subCondition>
+                            <condition>salary &gt;= 0</condition>
+                            <bonus>0.0</bonus>
+                            <description>Số năm làm việc &lt; 5, không có tiền thưởng.</description>
+                        </subCondition>
+                    </case>
+                </logic>
+            </response>
+            <response>
+                <code>400</code>
+                <description>Yêu cầu không hợp lệ nếu lương hoặc số năm làm việc nhỏ hơn 0</description>
+                <format>JSON</format>
+                <logic>
+                    <case>
+                        <condition>salary &lt; 0</condition>
+                        <error>Invalid Salary</error>
+                        <message>Error: Salary must be greater than or equal to 0.</message>
+                        <description>Mức lương không hợp lệ, trả về lỗi yêu cầu không hợp lệ.</description>
+                    </case>
+                    <case>
+                        <condition>years &lt; 0</condition>
+                        <error>Invalid Years</error>
+                        <message>Error: Years must be greater than or equal to 0.</message>
+                        <description>Số năm làm việc không hợp lệ, trả về lỗi yêu cầu không hợp lệ.</description>
+                    </case>
+                </logic>
+            </response>
+        </responses>
+    </api>
+</requirement>

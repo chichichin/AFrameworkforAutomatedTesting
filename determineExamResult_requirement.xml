@@ -1,0 +1,51 @@
+<requirement>
+    <api>
+        <name>Determine Exam Result API</name>
+        <description>
+            API này nhận vào điểm số của thí sinh và xác định kết quả thi (Đậu hoặc Rớt) dựa trên điểm chuẩn là 80.
+            Nếu điểm số lớn hơn 100, API sẽ trả về lỗi yêu cầu không hợp lệ.
+        </description>
+        <method>GET</method>
+        <path>/determineExamResult</path>
+        <parameters>
+            <parameter>
+                <name>score</name>
+                <type>int</type>
+                <description>Điểm số của thí sinh (phải nằm trong khoảng từ 0 đến 100)</description>
+                <required>true</required>
+            </parameter>
+        </parameters>
+        <responses>
+            <response>
+                <code>200</code>
+                <description>Trả về kết quả thi của thí sinh</description>
+                <format>JSON</format>
+                <logic>
+                    <case>
+                        <condition>score &gt;= 80 &amp;&amp; score &lt;= 100</condition>
+                        <result>Pass</result>
+                        <description>Điểm số đạt yêu cầu (điểm chuẩn là 80), thí sinh Đậu.</description>
+                    </case>
+                    <case>
+                        <condition>score &gt;= 0 &amp;&amp; score &lt; 80</condition>
+                        <result>Pass</result>
+                        <description>Điểm số không đạt yêu cầu, thí sinh Rớt.</description>
+                    </case>
+                </logic>
+            </response>
+            <response>
+                <code>400</code>
+                <description>Yêu cầu không hợp lệ nếu điểm số vượt quá 100</description>
+                <format>JSON</format>
+                <logic>
+                    <case>
+                        <condition>score &gt; 100</condition>
+                        <error>Invalid Score</error>
+                        <message>Error: Score cannot exceed 100.</message>
+                        <description>Điểm số vượt quá giới hạn hợp lệ, trả về lỗi yêu cầu không hợp lệ.</description>
+                    </case>
+                </logic>
+            </response>
+        </responses>
+    </api>
+</requirement>

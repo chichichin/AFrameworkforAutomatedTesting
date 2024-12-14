@@ -1,0 +1,87 @@
+<requirement>
+    <api>
+        <name>Math and English Grade Calculator API</name>
+        <description>
+            API này tính toán xếp loại điểm dựa trên điểm của môn Toán và Tiếng Anh.
+            Dựa trên điểm số của hai môn học, API trả về xếp loại:
+            <list>
+                <item>Cả điểm Toán và Tiếng Anh đều trên hoặc bằng 90: Xếp loại A.</item>
+                <item>Điểm Toán lớn hơn hoặc bằng 50 và điểm Tiếng Anh lớn hơn hoặc bằng 60:
+                    <list>
+                        <item>Nếu điểm Toán lớn hơn hoặc bằng 80 hoặc điểm Tiếng Anh lớn hơn hoặc bằng 90: Xếp loại B.</item>
+                        <item>Nếu không thỏa mãn điều kiện trên: Xếp loại C.</item>
+                    </list>
+                </item>
+                <item>Các trường hợp khác: Xếp loại D.</item>
+            </list>
+        </description>
+        <method>GET</method>
+        <path>/MathEnglishGradeCalculator</path>
+        <parameters>
+            <parameter>
+                <name>math</name>
+                <type>int</type>
+                <description>Điểm môn Toán (0 - 100)</description>
+                <required>true</required>
+            </parameter>
+            <parameter>
+                <name>english</name>
+                <type>int</type>
+                <description>Điểm môn Tiếng Anh (0 - 100)</description>
+                <required>true</required>
+            </parameter>
+        </parameters>
+        <responses>
+            <response>
+                <code>200</code>
+                <description>Trả về xếp loại điểm dựa trên điểm số của môn Toán và Tiếng Anh</description>
+                <format>JSON</format>
+                <logic>
+                    <case>
+                        <condition>
+                            <subCondition>
+                                <condition>math &gt;= 90 &amp;&amp; math &lt;= 100</condition>
+                                <description>Điểm Toán >= 90</description>
+                            </subCondition>
+                            <subCondition>
+                                <condition>english &gt;= 90 &amp;&amp; english &lt;= 100</condition>
+                                <description>Điểm Tiếng Anh >= 90</description>
+                            </subCondition>
+                        </condition>
+                        <grade>A</grade>
+                        <description>Cả điểm Toán và Tiếng Anh đều trên hoặc bằng 90, xếp loại A.</description>
+                    </case>
+                    <case>
+                        <condition>
+                            <subCondition>
+                                <condition>math &gt;= 50 &amp;&amp; math &lt; 90</condition>
+                                <description>Điểm Toán >= 50</description>
+                            </subCondition>
+                            <subCondition>
+                                <condition>english &gt;= 60 &amp;&amp; english &lt;= 100</condition>
+                                <description>Điểm Tiếng Anh >= 60</description>
+                            </subCondition>
+                            <logic>
+                                <case>
+                                    <condition>math &gt;= 80 || english &gt;= 90</condition>
+                                    <grade>B</grade>
+                                    <description>Điểm Toán >= 80 hoặc điểm Tiếng Anh >= 90, xếp loại B.</description>
+                                </case>
+                                <case>
+                                    <condition>math &lt; 80 &amp;&amp; english &lt; 90</condition>
+                                    <grade>C</grade>
+                                    <description>Điểm Toán &lt; 80 và điểm Tiếng Anh &lt; 90, xếp loại C.</description>
+                                </case>
+                            </logic>
+                        </condition>
+                    </case>
+                    <case>
+                        <condition>Khác</condition>
+                        <grade>D</grade>
+                        <description>Không thỏa mãn các điều kiện trên, xếp loại D.</description>
+                    </case>
+                </logic>
+            </response>
+        </responses>
+    </api>
+</requirement>

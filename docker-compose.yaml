@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  wiremock:
+    image: wiremock/wiremock
+    container_name: wiremock
+    ports:
+      - "9090:8080"
+    volumes:
+      - ./src/test/resources/prepareData/feature1/mockData/mappings:/home/wiremock/mappings
+      - ./src/test/resources/prepareData/feature1/mockData/files:/home/wiremock/__files
+    command: --bind-address 0.0.0.0 --verbose

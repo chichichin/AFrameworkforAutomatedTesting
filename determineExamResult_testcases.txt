@@ -1,0 +1,15 @@
+score=0|200|{"result":"Fail"}
+score=99|200|{"result":"Pass"}
+score=1|200|{"result":"Fail"}
+score=100|200|{"result":"Pass"}
+score=79|200|{"result":"Fail"}
+score=101|400|{"error":"Score cannot exceed 100."}
+score=2147483647|400|{"error":"Score cannot exceed 100."}
+score=2147483648|400|{"timestamp":"2024-12-13T07:55:54.102+00:00","status":400,"error":"Bad Request","path":"/api/determineExamResult"}
+score=-1|200|{"result":"Fail"}
+score=2147483646|400|{"error":"Score cannot exceed 100."}
+score=80|200|{"result":"Pass"}
+score=81|200|{"result":"Pass"}
+score=67|200|{"result":"Fail"}
+score=86|200|{"result":"Pass"}
+score=1029551844|400|{"error":"Score cannot exceed 100."}

@@ -1,0 +1,57 @@
+<requirement>
+    <api>
+        <name>Grade Calculation API</name>
+        <description>
+            API này nhận vào một tham số điểm trung bình (averageGrade) và trả về xếp hạng tương ứng dựa trên các quy tắc về điểm số.
+        </description>
+        <method>GET</method>
+        <path>/grade</path>
+        <parameters>
+            <parameter>
+                <name>averageGrade</name>
+                <type>int</type>
+                <description>Điểm trung bình của học sinh</description>
+                <required>true</required>
+            </parameter>
+        </parameters>
+        <responses>
+            <response>
+                <code>200</code>
+                <description>Trả về xếp hạng dựa trên điểm trung bình</description>
+                <format>JSON</format>
+                <logic>
+                    <case>
+                        <condition>averageGrade &gt;= 90 &amp;&amp; averageGrade &lt;= 100</condition>
+                        <grade>A</grade>
+                        <description>Điểm xuất sắc, xếp hạng A.</description>
+                    </case>
+                    <case>
+                        <condition>averageGrade &gt;= 80 &amp;&amp; averageGrade &lt; 90</condition>
+                        <grade>B</grade>
+                        <description>Điểm giỏi, xếp hạng B.</description>
+                    </case>
+                    <case>
+                        <condition>averageGrade &gt;= 70 &amp;&amp; averageGrade &lt; 80</condition>
+                        <grade>C</grade>
+                        <description>Điểm khá, xếp hạng C.</description>
+                    </case>
+                    <case>
+                        <condition>averageGrade &gt;= 60 &amp;&amp; averageGrade &lt; 70</condition>
+                        <grade>D</grade>
+                        <description>Điểm trung bình, xếp hạng D.</description>
+                    </case>
+                    <case>
+                        <condition>averageGrade &gt;= 0 &amp;&amp; averageGrade &lt; 60</condition>
+                        <grade>F</grade>
+                        <description>Điểm kém, xếp hạng F.</description>
+                    </case>
+                    <case>
+                        <condition>Khác</condition>
+                        <grade>I</grade>
+                        <description>Điểm không hợp lệ, xếp hạng I.</description>
+                    </case>
+                </logic>
+            </response>
+        </responses>
+    </api>
+</requirement>

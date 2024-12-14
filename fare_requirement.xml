@@ -1,0 +1,67 @@
+<requirement>
+    <api>
+        <name>Fare Calculation API</name>
+        <description>
+            API này nhận vào hai tham số tuổi và khoảng cách di chuyển, và trả về giá vé tương ứng dựa trên các quy tắc về tuổi và khoảng cách.
+        </description>
+        <method>GET</method>
+        <path>/fare</path>
+        <parameters>
+            <parameter>
+                <name>age</name>
+                <type>int</type>
+                <description>Tuổi của hành khách</description>
+                <required>true</required>
+            </parameter>
+            <parameter>
+                <name>distance</name>
+                <type>int</type>
+                <description>Khoảng cách di chuyển (km)</description>
+                <required>true</required>
+            </parameter>
+        </parameters>
+        <responses>
+            <response>
+                <code>200</code>
+                <description>Trả về giá vé dựa trên điều kiện về tuổi và khoảng cách</description>
+                <format>JSON</format>
+                <logic>
+                    <case>
+                        <condition>age &gt;= 0 &amp;&amp; age &lt; 4</condition>
+                        <fare>0</fare>
+                        <description>Hành khách dưới 4 tuổi, không thu phí.</description>
+                    </case>
+                    <case>
+                        <condition>age &gt;= 4 &amp;&amp; age &lt;= 14</condition>
+                        <subCondition>
+                            <condition>distance &gt;= 10</condition>
+                            <fare>130</fare>
+                        </subCondition>
+                        <subCondition>
+                            <condition>distance &gt; 0 &amp;&amp; distance &lt; 10</condition>
+                            <fare>100</fare>
+                        </subCondition>
+                    </case>
+                    <case>
+                        <condition>age &gt;= 15 &amp;&amp; age &lt; 60</condition>
+                        <subCondition>
+                            <condition>distance &gt; 0 &amp;&amp; distance &lt; 10</condition>
+                            <fare>160</fare>
+                        </subCondition>
+                    </case>
+                    <case>
+                        <condition>age &gt;= 60 &amp;&amp; age &lt;= 150 </condition>
+                        <subCondition>
+                            <condition>distance &gt;= 10</condition>
+                            <fare>250</fare>
+                        </subCondition>
+                    </case>
+                    <case>
+                        <condition>Khác</condition>
+                        <fare>200</fare>
+                    </case>
+                </logic>
+            </response>
+        </responses>
+    </api>
+</requirement>

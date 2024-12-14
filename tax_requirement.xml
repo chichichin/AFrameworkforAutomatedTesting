@@ -1,0 +1,59 @@
+<requirement>
+    <api>
+        <name>Tax Calculation API</name>
+        <description>
+            API này nhận vào thu nhập và số người phụ thuộc, trả về số tiền thuế phải nộp dựa trên các quy tắc về thu nhập và số người phụ thuộc.
+        </description>
+        <method>GET</method>
+        <path>/calculateTax</path>
+        <parameters>
+            <parameter>
+                <name>income</name>
+                <type>double</type>
+                <description>Thu nhập của người dùng (đơn vị: tiền tệ)</description>
+                <required>true</required>
+            </parameter>
+            <parameter>
+                <name>dependents</name>
+                <type>int</type>
+                <description>Số người phụ thuộc</description>
+                <required>true</required>
+            </parameter>
+        </parameters>
+        <responses>
+            <response>
+                <code>200</code>
+                <description>Trả về số tiền thuế phải nộp</description>
+                <format>JSON</format>
+                <logic>
+                    <case>
+                        <condition>income &gt;= 50000</condition>
+                        <subCondition>
+                            <condition>dependents &gt;= 2</condition>
+                            <tax>income * 0.2</tax>
+                            <description>Thu nhập lớn hơn 50,000 và có nhiều hơn 2 người phụ thuộc, thuế bằng 20% thu nhập.</description>
+                        </subCondition>
+                        <subCondition>
+                            <condition>dependents &gt;= 0 &amp;&amp; dependents &lt; 2</condition>
+                            <tax>income * 0.25</tax>
+                            <description>Thu nhập lớn hơn 50,000 và có tối đa 2 người phụ thuộc, thuế bằng 25% thu nhập.</description>
+                        </subCondition>
+                    </case>
+                    <case>
+                        <condition>income &gt; 0 &amp;&amp; income &lt; 50000</condition>
+                        <subCondition>
+                            <condition>dependents &gt;= 2</condition>
+                            <tax>income * 0.1</tax>
+                            <description>Thu nhập nhỏ hơn hoặc bằng 50,000 và có nhiều hơn 2 người phụ thuộc, thuế bằng 10% thu nhập.</description>
+                        </subCondition>
+                        <subCondition>
+                            <condition>dependents &gt;= 0 &amp;&amp; dependents &lt; 2</condition>
+                            <tax>income * 0.15</tax>
+                            <description>Thu nhập nhỏ hơn hoặc bằng 50,000 và có tối đa 2 người phụ thuộc, thuế bằng 15% thu nhập.</description>
+                        </subCondition>
+                    </case>
+                </logic>
+            </response>
+        </responses>
+    </api>
+</requirement>

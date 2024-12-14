@@ -1,0 +1,62 @@
+<requirement>
+    <api>
+        <name>Customer Discount Calculation API</name>
+        <description>
+            API này tính toán mức giảm giá cho khách hàng dựa trên số năm sử dụng dịch vụ và mức chi tiêu hàng năm của họ.
+            Mức giảm giá được xác định dựa trên hai yếu tố: số năm sử dụng dịch vụ và mức chi tiêu hàng năm.
+        </description>
+        <method>GET</method>
+        <path>/CustomerDiscount</path>
+        <parameters>
+            <parameter>
+                <name>years</name>
+                <type>int</type>
+                <description>Số năm sử dụng dịch vụ của khách hàng</description>
+                <required>true</required>
+            </parameter>
+            <parameter>
+                <name>annualSpend</name>
+                <type>double</type>
+                <description>Mức chi tiêu hàng năm của khách hàng</description>
+                <required>true</required>
+            </parameter>
+        </parameters>
+        <responses>
+            <response>
+                <code>200</code>
+                <description>Trả về mức giảm giá dựa trên số năm sử dụng dịch vụ và mức chi tiêu hàng năm của khách hàng</description>
+                <format>JSON</format>
+                <logic>
+                    <case>
+                        <condition>years = 0 &amp;&amp; years = 1</condition>
+                        <discount>0.0</discount>
+                        <description>Khách hàng sử dụng dịch vụ dưới 2 năm, không có giảm giá.</description>
+                    </case>
+                    <case>
+                        <condition>annualSpend &gt; 1000</condition>
+                        <subCondition>
+                            <condition>years &gt; 5</condition>
+                            <discount>0.20</discount>
+                            <description>Khách hàng sử dụng dịch vụ trên 5 năm và chi tiêu trên 1000, giảm 20%.</description>
+                        </subCondition>
+                        <subCondition>
+                            <condition>years &gt; 1 &amp;&amp; years &lt;= 5</condition>
+                            <discount>0.15</discount>
+                            <description>Khách hàng sử dụng dịch vụ dưới 5 năm và chi tiêu trên 1000, giảm 15%.</description>
+                        </subCondition>
+                    </case>
+                    <case>
+                        <condition>annualSpend &gt; 500</condition>
+                        <discount>0.10</discount>
+                        <description>Khách hàng chi tiêu trên 500, giảm 10%.</description>
+                    </case>
+                    <case>
+                        <condition>annualSpend &gt; 0 &amp;&amp; annualSpend &lt;= 500</condition>
+                        <discount>0.05</discount>
+                        <description>Khách hàng chi tiêu &lt;= 500, giảm 5%.</description>
+                    </case>
+                </logic>
+            </response>
+        </responses>
+    </api>
+</requirement>

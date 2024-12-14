@@ -1,0 +1,60 @@
+<requirement>
+    <api>
+        <name>Shipping Cost Calculation API</name>
+        <description>
+            API này tính toán chi phí vận chuyển dựa trên trọng lượng và khoảng cách của gói hàng.
+            Chi phí sẽ được xác định dựa trên hai yếu tố: trọng lượng và khoảng cách vận chuyển.
+        </description>
+        <method>GET</method>
+        <path>/getShippingCost</path>
+        <parameters>
+            <parameter>
+                <name>weight</name>
+                <type>double</type>
+                <description>Trọng lượng gói hàng (kg)</description>
+                <required>true</required>
+            </parameter>
+            <parameter>
+                <name>distance</name>
+                <type>int</type>
+                <description>Khoảng cách vận chuyển (km)</description>
+                <required>true</required>
+            </parameter>
+        </parameters>
+        <responses>
+            <response>
+                <code>200</code>
+                <description>Trả về chi phí vận chuyển dựa trên trọng lượng và khoảng cách</description>
+                <format>JSON</format>
+                <logic>
+                    <case>
+                        <condition>weight &gt;= 20</condition>
+                        <subCondition>
+                            <condition>distance &gt;= 100</condition>
+                            <cost>50.0</cost>
+                            <description>Trọng lượng >= 20kg và khoảng cách >= 100km, chi phí vận chuyển là 50.0.</description>
+                        </subCondition>
+                        <subCondition>
+                            <condition>distance &gt; 0 &amp;&amp; distance &lt; 100</condition>
+                            <cost>30.0</cost>
+                            <description>Trọng lượng >= 20kg và khoảng cách &lt; 100km, chi phí vận chuyển là 30.0.</description>
+                        </subCondition>
+                    </case>
+                    <case>
+                        <condition>weight &gt; 0 &amp;&amp; weight &lt; 20</condition>
+                        <subCondition>
+                            <condition>distance &gt;= 100</condition>
+                            <cost>20.0</cost>
+                            <description>Trọng lượng &lt; 20kg và khoảng cách >= 100km, chi phí vận chuyển là 20.0.</description>
+                        </subCondition>
+                        <subCondition>
+                            <condition>distance &gt; 0 &amp;&amp; distance &lt; 100</condition>
+                            <cost>10.0</cost>
+                            <description>Trọng lượng &lt; 20kg và khoảng cách &gt; 100km, chi phí vận chuyển là 10.0.</description>
+                        </subCondition>
+                    </case>
+                </logic>
+            </response>
+        </responses>
+    </api>
+</requirement>
