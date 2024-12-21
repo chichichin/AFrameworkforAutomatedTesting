@@ -25,3 +25,6 @@ This project is an automation application built with **Java**, using popular too
 ```bash
 git clone https://github.com/username/automation-project.git
 cd <project-directory>
+
+### 3. Run Tests
+Open org/example/feature/feature.java, right-click on any test file, and select Run Test.
